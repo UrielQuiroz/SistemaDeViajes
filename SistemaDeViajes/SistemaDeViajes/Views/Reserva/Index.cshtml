@@ -1,0 +1,167 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<ReservaModel>
+
+
+@{
+    ViewBag.Title = "Index";
+
+    string[] arrayID = { };
+    string[] arrayCantidad = { };
+
+    if (ViewBag.listPasajeId != null && ViewBag.listPasajeCantidad != null)
+    {
+        arrayID = ((string)ViewBag.listPasajeId).Split('{');
+        arrayCantidad = ((string)ViewBag.listPasajeCantidad).Split('{');
+    }
+
+}
+
+
+<style>
+    .agregar {
+        background-color: #01230e;
+        position: relative;
+        color: white !important;
+        font-weight: bold;
+    }
+
+        .agregar::after {
+            position: absolute;
+            content:"Reservado";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: green;
+            font-size: 2em;
+            color: white;
+            text-align: center;
+        }
+
+</style>
+
+<h4>Reservas</h4>
+
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 1em; grid-auto-rows: 510px; margin-top: 1em;" id="divReserva">
+
+    @foreach (var item in Model)
+    {
+        <div id="@item.IDViaje" style="border: 1px solid #666; border-radius: 1px; padding: 2px;"
+             
+             @{ 
+                 string clase;
+                 bool readOnly = false;
+
+                 string valor = "";
+                 if (arrayID.Contains(item.IDViaje.ToString()))
+                 {
+                     clase = "agregar";
+                     readOnly = true;
+                     int indice = Array.IndexOf(arrayID, item.IDViaje.ToString());
+                     valor = arrayCantidad[indice].Split('*')[0];
+                 }
+                 else
+                 {
+                     clase = "sinagregar";
+                     readOnly = false;
+                     valor = "";
+                 }
+
+             }
+             
+             class="@clase"
+             >
+            @{ 
+                string foto = Convert.ToBase64String(item.Foto);
+                string extensionFoto = Path.GetExtension(item.nombreFoto).Substring(1);
+                string cadena = "data:image/" + extensionFoto + ";base64," + foto;
+            }
+            <img src="@cadena" style="width: 100%; height: auto;"/>
+            <div style="padding: 1em; display: flex; justify-content: space-around;">
+                <label>Origen: @item.lugarOrigen</label>
+                <label>Destino: @item.lugarDestino</label>
+            </div>
+
+            <div style="padding: 1em;">
+                <p>Placa: @item.placaBus (@item.DescripcionBus)</p>
+                <p>Fecha: @item.fechaViaje</p>
+                <p style="font-weight:bold;">Precio: @item.precio</p>
+                <p>Disponible: @item.asientosDisponibles / @item.totalAsientos</p>
+                Reservar: <input class="text-dark" value="@valor" readonly="@readOnly" id="txt_@item.IDViaje" type="number" min="0" max="@item.asientosDisponibles"/>
+
+                <div style="margin-top: 1em; text-align: center;">
+                    <button class="btn btn-primary" onclick="Reservar(@item.IDViaje, @item.asientosDisponibles, '@item.fechaViaje', '@item.lugarOrigen', '@item.lugarDestino', 
+                            @item.precio.ToString().Replace(',', '.'), @item.IdBus)">Aceptar</button>
+                    <button class="btn btn-danger" onclick="CancelarReserva(@item.IDViaje)">Cancelar</button>
+                </div>
+
+            </div>
+        </div>
+    }
+
+</div>
+
+<script>
+    function Reservar(idViaje, asientosDisponibles, fechaViaje, origen, destino, precio, idBus) {
+
+        var numPasajes = document.getElementById("txt_" + idViaje).value;
+        if (numPasajes <= 0) {
+            alert("Debe ingresar una cantidad mayor a 0");
+            return;
+        }
+
+        if (numPasajes == "") {
+            alert("No puede ingresar un valor vacio");
+            return;
+        }
+
+        if (numPasajes > asientosDisponibles) {
+            alert("No puede solicitar mas de lo que esta disponible que es " + asientosDisponibles);
+            return;
+        }
+
+        //Hacemmos el confirm
+        if (confirm("Desea hacer la reserva?") == 1) {
+            if (document.getElementById(idViaje).classList.contains("agregar")) {
+                alert("Ya se ha agregado la reserva.");
+            }
+            else {
+                document.getElementById(idViaje).classList.add("agregar");
+                document.getElementById("txt_" + idViaje).readOnly = true;
+
+                var urlCookies = "/Reserva/AgregarCookies/?IdViaje=" + idViaje + "&cantidad=" + numPasajes + "&fechaViaje=" + fechaViaje + "&origen=" + origen + "&destino=" + destino + "&precio=" + precio + "&idBus=" + idBus;
+                $.get(urlCookies, function (data) {
+                    if (data == "OK") {
+                        alert("Se agrego correctamente.");
+                    }
+                    else {
+                        alert("Ocurrio un error");
+                    }
+                })
+            }
+        }
+    }
+
+    function CancelarReserva(idViaje) {
+        if (confirm("¿Desea cancelar la reserva?") == 1) {
+            if (document.getElementById(idViaje).classList.contains("agregar")) {
+                document.getElementById(idViaje).classList.remove("agregar");
+                document.getElementById("txt_" + idViaje).value = "";
+                document.getElementById("txt_" + idViaje).readOnly = false;
+
+                var url = "/Reserva/QuitarCookie/?id=" + idViaje;
+                $.get(url, function (data) {
+                    if (data == "OK") {
+                        alert("Se ejecuto correctamentte");
+                    }
+                    else {
+                        alert("Ocurrio un error");
+                    }
+                })
+            }
+        }
+    }
+</script>

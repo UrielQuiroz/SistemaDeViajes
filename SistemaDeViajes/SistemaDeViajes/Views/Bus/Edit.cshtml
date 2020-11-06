@@ -1,0 +1,98 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model BusModel
+
+
+@{
+    ViewBag.Title = "Edit";
+    List<SelectListItem> dropDownSuc = (List<SelectListItem>)ViewBag.DropDownListSucursal;
+    List<SelectListItem> dropDownBus = (List<SelectListItem>)ViewBag.DropDownListTipoBus;
+    List<SelectListItem> dropDownModelo = (List<SelectListItem>)ViewBag.DropDownListModelo;
+    List<SelectListItem> dropDownMarca = (List<SelectListItem>)ViewBag.DropDownListMarca;
+}
+
+<h2>Editar</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Edit", "Bus", FormMethod.Post, new { id="frmEdit"}))
+        {
+            <div>
+                @Html.LabelFor(p => p.IDBus)
+                @Html.TextBoxFor(p => p.IDBus, null, new { @class = "form-control", @readOnly=true})
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDSucursal)
+                @Html.DropDownList("IDSucursal", dropDownSuc, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDSucursal", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDTipoBus)
+                @Html.DropDownList("IDTipoBus", dropDownBus, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDTipoBus", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Placa)
+                @Html.TextBoxFor(p => p.Placa, null, new { @class = "form-control" })
+                @Html.ValidationMessage("IDTipoBus", new { @class = "text-danger" })
+                @if (Model != null & Model.msjError != null)
+                {
+                    @Html.Label(Model.msjError, new { @class="text-danger"})
+                }
+            </div>
+            <div>
+                @Html.LabelFor(p => p.fechaCompra)
+                @Html.EditorFor(p => p.fechaCompra, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("fechaCompra", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDModelo)
+                @Html.DropDownList("IDModelo", dropDownModelo, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDModelo", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.NumFilas)
+                @Html.TextBoxFor(p => p.NumFilas, null, new { @class = "form-control" })
+                @Html.ValidationMessage("NumFilas", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.numColumnas)
+                @Html.TextBoxFor(p => p.numColumnas, null, new { @class = "form-control" })
+                @Html.ValidationMessage("numColumnas", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Observacion)
+                @Html.TextBoxFor(p => p.Observacion, null, new { @class = "form-control" })
+                @Html.ValidationMessage("Observacion", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Descripcion)
+                @Html.TextBoxFor(p => p.Descripcion, null, new { @class = "form-control" })
+                @Html.ValidationMessage("Descripcion", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDMarca)
+                @Html.DropDownList("IDMarca", dropDownMarca, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDMarca", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div style="margin: auto;">
+                <input type="submit" class="btn btn-primary" value="Guardar" />
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    var frmEdit = document.getElementById("frmEdit");
+    frmEdit.onsubmit = function (e) {
+        e.preventDefault();
+        if (confirm("¿Desea actualizar el registro?") == 1) {
+            frmEdit.submit();
+        }
+        else {
+            alert("Cancelo");
+        }
+    }
+</script>

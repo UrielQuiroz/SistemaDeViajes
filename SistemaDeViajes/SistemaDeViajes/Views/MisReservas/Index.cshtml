@@ -1,0 +1,64 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<ReservaModel>
+
+
+
+@using (Ajax.BeginForm("Filtro", "", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "divMisReservas",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltro" }))
+{
+    <div id="divMisReservas" class="mt-3">
+        @Html.Partial("_tablaMisReservas", Model)
+    </div>
+
+    <p style="text-align: center;">
+        <button class="btn btn-success" onclick="Grabar()">Grabar</button>
+    </p>
+}
+
+
+<script>
+    function Delete(idViaje) {
+
+        if (confirm("Desea eliminar la reserva") == 1) {
+            var url = "/Reserva/QuitarCookie/?id=" + idViaje;
+            $.get(url, function (data) {
+                if (data == "OK") {
+                    alert("Se ejecuto correctamentte");
+                    $("#frmFiltro").trigger("submit");
+                }
+                else {
+                    alert("Ocurrio un error");
+                }
+            })
+        }
+    }
+
+
+    function Grabar() {
+        if (confirm("Desea grabar la información?") == 1) {
+            var total = document.getElementById("lblTotal").innerHTML;
+
+            if (total == "0") {
+                alert("Debe elegir un viaje para grabar.");
+                return;
+            }
+
+            $.get("/MisReservas/GuardarDatos/?total=" + total, function (data) {
+                if (data == "OK") {
+                    alert("Se guardo correctamente");
+                    $("#frmFiltro").trigger("submit");
+                }
+                else {
+                    alert("Ocurrio un error");
+                }
+            })
+        }
+    }
+
+</script>

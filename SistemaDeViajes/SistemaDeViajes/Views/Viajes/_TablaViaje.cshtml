@@ -1,0 +1,31 @@
+﻿
+
+
+@using SistemaDeViajes.Models
+@model List<ViajeModel>
+
+
+<table id="tablaViajes" class="table table-bordered table-hover">
+    <tr class="bg-primary">
+        <td>@Html.LabelFor(p => Model[0].IDViaje)</td>
+        <td>@Html.LabelFor(p => Model[0].NombreBus)</td>
+        <td>@Html.LabelFor(p => Model[0].NombreOrigen)</td>
+        <td>@Html.LabelFor(p => Model[0].NombreDestino)</td>
+        <td width="10%" class="font-weight-bold">Acciones</td>
+    </tr>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IDViaje</td>
+                <td>@item.NombreBus</td>
+                <td>@item.NombreOrigen</td>
+                <td>@item.NombreDestino</td>
+                <td>
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-edit" onclick="Edit(@item.IDViaje)" data-toggle="modal" data-target="#exampleModal"></button>
+                    <button type="button" class="btn btn-danger glyphicon glyphicon-trash" onclick="Delete(@item.IDViaje)" data-toggle="modal" data-target="#exampleModalDelete"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

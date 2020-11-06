@@ -1,0 +1,77 @@
+﻿
+
+
+@using SistemaDeViajes.Models
+@model ViajeModel
+
+
+@{
+    ViewBag.Title = "Edit";
+    List<SelectListItem> dropDownLugar = (List<SelectListItem>)ViewBag.DropDownListLugar;
+    List<SelectListItem> dropDownBus = (List<SelectListItem>)ViewBag.DropDownListBus;
+}
+
+<h2>Edit</h2>
+
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Edit", "Viajes", FormMethod.Post, new { id="frmEdit"}))
+        {
+            <div>
+                @Html.LabelFor(p => p.IDViaje)
+                @Html.TextBoxFor(p => p.IDViaje, new { @class = "form-control", @readOnly=true })
+                @Html.ValidationMessage("IDViaje", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDLugarOrige)
+                @Html.DropDownList("IDLugarOrige", dropDownLugar, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDLugarOrige", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDLugarDestino)
+                @Html.DropDownList("IDLugarDestino", dropDownLugar, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDLugarOrige", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Precio)
+                @Html.TextBoxFor(p => p.Precio, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("Precio", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.FechaViaje)
+                @Html.EditorFor(p => p.FechaViaje, null, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("FechaViaje", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.IDBus)
+                @Html.DropDownList("IDBus", dropDownBus, null, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("IDBus", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.NOAsientosDisponibles)
+                @Html.TextBoxFor(p => p.NOAsientosDisponibles, new { @class = "form-control p-1" })
+                @Html.ValidationMessage("NOAsientosDisponibles", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div style="margin: auto;">
+                <input type="submit" class="btn btn-primary" value="Guardar" />
+                @Html.ActionLink("Cancelar", "Index", "Viajes", new { @class = "btn btn-danger" })
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    var frmEdit = document.getElementById("frmEdit");
+    frmEdit.onsubmit = function (e) {
+        e.preventDefaut();
+        if (confirm("Desea actualizar el registro")) {
+            frmEdit.submit();
+        }
+        else {
+            alert("Cancelo");
+        }
+    }
+</script>

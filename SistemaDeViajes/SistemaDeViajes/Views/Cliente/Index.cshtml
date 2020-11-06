@@ -1,0 +1,74 @@
+﻿
+@using SistemaDeViajes.Models
+@model List<ClientesModel>
+
+
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> DropDownSexo = (List<SelectListItem>)ViewBag.lista;
+}
+
+<h2>Clientes</h2>
+
+@Html.ActionLink("Nuevo", "Add", "Cliente", null, new { @class = "btn btn-success" })
+
+@using (Html.BeginForm("Index", "Cliente", FormMethod.Get))
+{
+
+    @Html.Label("Buscar por sexo: ")
+    @Html.DropDownList("idSexo", DropDownSexo)
+    <input type="submit" class="btn btn-info" value="Buscar" />
+
+    <div class="mt-3">
+        <table id="tabla" class="table table-bordered table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <td width="5%">@Html.LabelFor(p => Model[0].IDCliente)</td>
+                    <td>@Html.LabelFor(p => Model[0].Nombre)</td>
+                    <td>@Html.LabelFor(p => Model[0].Email)</td>
+                    <td>@Html.LabelFor(p => Model[0].Direccion)</td>
+                    <td>@Html.LabelFor(p => Model[0].TelefonoCelular)</td>
+                    <td width="10%" class="font-weight-bold">Acciones</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IDCliente</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Email</td>
+                        <td>@item.Direccion</td>
+                        <td>@item.TelefonoCelular</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "Cliente", new { id = item.IDCliente }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                        @Html.ActionLink(" ", "Delete", "Cliente", new { id = item.IDCliente }, new { @class = "btn btn-danger glyphicon glyphicon-trash", @onclick = "Delete()" })
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+
+    $(document).ready(function () {
+        $('#tabla').DataTable({
+            "searching": false,
+            lengthMenu: [[5, 10, 15, 20, 25, 50, -1], [5, 10, 15, 20, 25, 50, "Todos"]],
+        });
+    });
+
+
+    function Delete() {
+        if (confirm("Desea eliminar el registro?") == 1) {
+            alert("Se ha eliminado...");
+        }
+        else {
+            event.preventDefault();
+        }
+    }
+
+</script>

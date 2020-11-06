@@ -1,0 +1,30 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<RolModel>
+
+
+<table id="tabla" class="table table-bordered table-hover">
+    <thead class="bg-primary">
+        <tr>
+            <td class="font-weight-bold">ID</td>
+            <td>@Html.LabelFor(p => Model[0].Nombre)</td>
+            <td>@Html.LabelFor(p => Model[0].Descripcion)</td>
+            <td width="10%" class="font-weight-bold">Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IDRol</td>
+                <td>@item.Nombre</td>
+                <td>@item.Descripcion</td>
+                <td>
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-edit" onclick="Editar(@item.IDRol)" data-toggle="modal" data-target="#exampleModal"></button>
+                    <button type="button" class="btn btn-danger glyphicon glyphicon-trash" onclick="Delete(@item.IDRol)" data-toggle="modal" data-target="#exampleModalDelete"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

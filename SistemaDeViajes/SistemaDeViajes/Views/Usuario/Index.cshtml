@@ -1,0 +1,190 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<UsuarioModel>
+
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> dropDownPersona = (List<SelectListItem>)ViewBag.DropDownPersonas;
+    List<SelectListItem> dropDownRol = (List<SelectListItem>)ViewBag.DropDownListRol;
+}
+
+<h2>Usuarios</h2>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-success" onclick="Agregar()" data-toggle="modal" data-target="#exampleModal">
+    Nuevo
+</button>
+
+@using (Ajax.BeginForm("Filtro", "", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "divTabla",
+    InsertionMode = InsertionMode.Replace
+
+}, new { @id = "frmUsuarioa" }))
+{
+    <div class="form-group row">
+        @Html.Label("Buscar persona:", null, new { @class = "ml-4 col-form-label h4" })
+        <div class="col-sm-5">
+            @Html.TextBox("nombrePersonaFilter", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div id="divTabla" class="mt-3">
+        @Html.Partial("_TablaUsuario", Model)
+    </div>
+}
+
+
+<!-- Modal Delete-->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea Eliminar?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarDelete" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="DeleteUsuario()" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Usuarios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("Save", "Usuario", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "Save",
+                UpdateTargetId= "error"
+            },
+            new { @id = "frmUser" }
+            ))
+            {
+            <div class="modal-body">
+                @Html.Hidden("Accion")
+                @Html.Hidden("nombrePersona")
+                <div>
+                    @Html.Label("Nombre")
+                    @Html.TextBox("Nombre", null, new { @class = "form-control" })
+                </div>
+                <div id="divPass">
+                    @Html.Label("Contraseña")
+                    @Html.Password("Contraseña", null, new { @class = "form-control", @id = "txtPass" })
+                </div>
+                <div id="divUser">
+                    @Html.Label("Persona")
+                    @Html.DropDownList("ID", dropDownPersona, new { @class = "form-control", @id = "txtID" })
+                </div>
+                <div>
+                    @Html.Label("Rol")
+                    @Html.DropDownList("IdRol", dropDownRol, new { @class = "form-control" })
+                </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelar" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            }
+                <div id="error"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function limpiarCampos() {
+        var controles = document.getElementsByClassName("form-control");
+        var ncontroles = controles.length;
+        for (var i = 0; i < ncontroles; i++) {
+            controles[i].value = "";
+        }
+
+        document.getElementById("error").innerHTML = "";
+    }
+
+    function Edit(id) {
+        limpiarCampos();
+        document.getElementById("Accion").value = id;
+        document.getElementById("divPass").style.display = "none";
+        document.getElementById("divUser").style.display = "none";
+
+        $.get("/Usuario/recuperarDatos/?id=" + id, function (data) {
+            document.getElementById("Nombre").value = data.Nombre;
+            document.getElementById("IdRol").value = data.IdRol;
+            document.getElementById("txtPass").value = "1";
+            document.getElementById("txtID").value = "1";
+        })
+    }
+
+    function Agregar() {
+        limpiarCampos();
+        document.getElementById("Accion").value = -1;
+        document.getElementById("divPass").style.display = "block";
+        document.getElementById("divUser").style.display = "block";
+    }
+
+    var ID = document.getElementById("txtID");
+    ID.onchange = function () {
+        document.getElementById("nombrePersona").value = ID.options[ID.selectedIndex].text;
+    }
+
+    function Save(data) {
+        if (data == "1" || data == "0" || data == "2") {
+            alert("Se agrego correctamente");
+            $("#frmUsuarioa").trigger("submit");
+            document.getElementById("btnCancelar").click();
+        }
+        else {
+            if (data == "-1") {
+                alert("El nombre del usuario ya existe");
+                document.getElementById("error").innerHTML = "";
+            }
+            else {
+                alert("Ocurrio un error");
+            }
+        }
+    }
+
+    var nombrePersona = document.getElementById("nombrePersonaFilter");
+    nombrePersona.onkeyup = function () {
+        $("#frmUsuarioa").trigger("submit");
+    }
+
+
+    function Delete(id) {
+        document.getElementById("Accion").value = id;
+    }
+
+    function DeleteUsuario() {
+        var id = document.getElementById("Accion").value;
+        $.get("/Usuario/Delete/?id=" + id, function (data)
+        {
+            if (data == 1) {
+                alert("Se elimino correctamente");
+                $("#frmUsuarioa").trigger("submit");
+                document.getElementById("btnCancelarDelete").click();
+            }
+            else {
+                alert("Ocurrio un error");
+            }
+        })
+    }
+
+
+
+</script>

@@ -1,0 +1,54 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<SucursalModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Sucursales</h2>
+@Html.ActionLink("Nuevo", "Add", "Sucursal", null, new { @class = "btn btn-success" })
+
+
+@using (Html.BeginForm("Index", "Sucursal", FormMethod.Get, new { @id = "frmSearch" }))
+{
+
+    @Html.Label("Buscar Sucursal: ")
+    @Html.TextBox("Nombre")
+
+    <div class="mt-3">
+        <table id="tabla" class="table table-bordered table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <td>@Html.LabelFor(p => Model[0].IDSucursal)</td>
+                    <td>@Html.LabelFor(p => Model[0].Nombre)</td>
+                    <td>@Html.LabelFor(p => Model[0].Direccion)</td>
+                    <td>@Html.LabelFor(p => Model[0].Telefono)</td>
+                    <td>@Html.LabelFor(p => Model[0].Email)</td>
+                    <td>@Html.LabelFor(p => Model[0].FechaApertura)</td>
+                    <td width="10%" class="font-weight-bold">Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IDSucursal</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Direccion</td>
+                        <td>@item.Telefono</td>
+                        <td>@item.Email</td>
+                        <td>@item.FechaApertura.ToShortDateString()</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "Sucursal", new { id = item.IDSucursal }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                            @Html.ActionLink(" ", "Delete", "Sucursal", new { id = item.IDSucursal }, new { @class = "btn btn-danger glyphicon glyphicon-trash", @onclick = "Delete()" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+    <script src="~/Scripts/Sucursal.js"></script>

@@ -1,0 +1,60 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model MarcaModel
+
+
+@{
+    ViewBag.Title = "Add";
+}
+
+
+
+
+
+
+<h2>Agregar</h2>
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("Add", "Marca", FormMethod.Post, new { id="frmAdd"}))
+        {
+            <div>
+                @Html.LabelFor(p => p.Nombre)
+                @Html.TextBoxFor(p => p.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessage("Nombre", new { @class = "text-danger" })
+                @if (Model != null && Model.msjError != null)
+                {
+                    @Html.Label(Model.msjError, new { @class="text-danger"})
+                }
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Descripcion)
+                @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                @Html.ValidationMessage("Descripcion", new { @class = "text-danger" })
+            </div>
+
+            <br />
+
+            <div style="margin: auto;">
+                <input type="submit" class="btn btn-primary" value="Guardar" />
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    var frmAdd = document.getElementById("frmAdd");
+    frmAdd.onsubmit = function (e) {
+        e.preventDefault();
+
+        if (confirm("¿Deseas gusrdar los datos?") == 1) {
+            frmAdd.submit();
+        }
+        else {
+            alert("Operacion canclada");
+        }
+    }
+</script>

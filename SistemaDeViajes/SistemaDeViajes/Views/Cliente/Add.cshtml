@@ -1,0 +1,85 @@
+﻿
+@using SistemaDeViajes.Models
+@model ClientesModel
+
+@{
+    ViewBag.Title = "Add";
+    List<SelectListItem> DropDownSexo = (List<SelectListItem>)ViewBag.lista;
+}
+
+<h2>Agregar</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Add", "Cliente", FormMethod.Post, new { id="frmAdd"}))
+        {
+            <div>
+                @Html.LabelFor(p => p.Nombre)
+                @Html.TextBoxFor(p => p.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessage("Nombre", new { @class = "text-danger" })
+                @if (Model!= null && Model.msjError != null)
+                {
+                    @Html.Label(Model.msjError, new { @class="text-danger"})
+                }
+            </div>
+            <div>
+                @Html.LabelFor(p => p.ApPaterno)
+                @Html.TextBoxFor(p => p.ApPaterno, new { @class = "form-control" })
+                @Html.ValidationMessage("ApPaterno", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.ApMaterno)
+                @Html.TextBoxFor(p => p.ApMaterno, new { @class = "form-control" })
+                @Html.ValidationMessage("ApMaterno", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Email)
+                @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+                @Html.ValidationMessage("Email", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.Direccion)
+                @Html.EditorFor(p => p.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("Direccion", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.idSexo)
+                @Html.DropDownList("idSexo", DropDownSexo, null, new { @class = "form-control dropdown p-1" })
+                @Html.ValidationMessage("idSexo", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.TelefonoFijo)
+                @Html.TextBoxFor(p => p.TelefonoFijo, new { @class = "form-control" })
+                @Html.ValidationMessage("TelefonoFijo", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(p => p.TelefonoCelular)
+                @Html.TextBoxFor(p => p.TelefonoCelular, new { @class = "form-control" })
+                @Html.ValidationMessage("TelefonoCelular", new { @class = "text-danger" })
+            </div>
+
+            <br />
+
+            <div style="margin: auto;">
+                <input type="submit" class="btn btn-primary" value="Guardar" />
+                @Html.ActionLink("Cancelar", "Index", "Cliente", new { @class = "btn btn-danger" })
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    var frmAdd = document.getElementById("frmAdd");
+    frmAdd.onsubmit = function (e) {
+        e.preventDefault();
+        if (confirm("¿Desea agregar el registro?") == 1) {
+            frmAdd.submit();
+        }
+        else {
+            alert("Cancelo");
+        }
+    }
+</script>
+
+

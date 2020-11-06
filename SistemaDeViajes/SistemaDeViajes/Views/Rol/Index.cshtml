@@ -1,0 +1,157 @@
+﻿
+@using SistemaDeViajes.Models
+@model List<RolModel>
+
+
+@{
+    /**/
+    ViewBag.Title = "Index";
+}
+
+<h2>Roles</h2>
+<button type="button" class="btn btn-success" onclick="Agregar()" data-toggle="modal" data-target="#exampleModal">
+    Nuevo
+</button>
+
+@using (Ajax.BeginForm("Filtro", "", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "divRol",
+    InsertionMode = InsertionMode.Replace
+}, new { @id = "frmFiltro" }))
+{
+    @Html.Label("Buscar rol: ")
+    @Html.TextBox("NombreRol", null, new { @class = "form-control" })
+
+    <div id="divRol" class="mt-3">
+        @Html.Partial("_TablaRol", Model)
+    </div>
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea Eliminar?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarDelete" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="DeleteRol()" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rol</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("Save", "Rol", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "Save",
+                UpdateTargetId = "error"
+            }))
+            {
+                @Html.Hidden("Accion")
+                <div class="modal-body">
+                    @*<div>
+                            @Html.Label("ID")
+                            @Html.TextBox("IDRol", null, new { @class = "form-control", @readOnly = true })
+                        </div>*@
+                    <div>
+                        @Html.Label("Nombre")
+                        @Html.TextBox("Nombre", null, new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.Label("Descripción")
+                        @Html.TextBox("Descripcion", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelar" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            }
+            <div id="error"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    var Nombre = document.getElementById("NombreRol");
+    Nombre.onkeyup = function () {
+        $("#frmFiltro").trigger("submit");
+    }
+
+    function Limpiar() {
+        document.getElementById("Nombre").value = "";
+        document.getElementById("Descripcion").value = "";
+        document.getElementById("error").innerHTML = "";
+
+    }
+
+    function Agregar() {
+        Limpiar();
+        document.getElementById("Accion").value = -1;
+    }
+
+    function Save(data) {
+        if (data == "1" || data == "0") {
+            $("#frmFiltro").trigger("submit");
+            document.getElementById("btnCancelar").click();
+            alert("Se guardo correctamente");
+        }
+        else {
+            if (data == "-1") {
+                alert("El campo nombre ya existe");
+                document.getElementById("error").innerHTML = "";
+            }
+            else {
+                alert("Ocurrio un error");
+            }
+        }
+    }
+
+
+    function Editar(id) {
+        Limpiar();
+        document.getElementById("Accion").value = id;
+
+        $.get("/Rol/recuperarDatos/?Accion=" + id, function (data) {
+            document.getElementById("Nombre").value = data.Nombre;
+            document.getElementById("Descripcion").value = data.Descripcion;
+        })
+    }
+
+    function Delete(id) {
+        document.getElementById("Accion").value = id;
+    }
+
+    function DeleteRol() {
+        var id = document.getElementById("Accion").value;
+        $.get("/Rol/Delete/?IDRol=" + id, function (data) {
+            if (data == "1") {
+                alert("Se elimino el registro");
+                $("#frmFiltro").trigger("submit");
+                document.getElementById("btnCancelarDelete").click();
+            }
+        })
+    }
+
+</script>

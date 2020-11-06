@@ -1,0 +1,53 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<EmpleadoModel>
+
+
+@{
+    ViewBag.Title = "Index";
+    List<SelectListItem> DropDownUsuario = (List<SelectListItem>)ViewBag.listDropUser;
+}
+
+<h2>Empleados</h2>
+@Html.ActionLink("Nuevo", "Add", "Empleado", null, new { @class = "btn btn-success" })
+
+@using (Html.BeginForm("Index", "Empleado", FormMethod.Get, new { @id="frmSearch"}))
+{
+
+    @Html.Label("Buscar tipo-usuario: ")
+    @Html.DropDownList("IDTipoUser", DropDownUsuario)
+
+    <div class="mt-3">
+        <table id="tabla" class="table table-bordered table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <td>@Html.LabelFor(p => Model[0].IDEmpleado)</td>
+                    <td>@Html.LabelFor(p => Model[0].Nombre)</td>
+                    <td>@Html.LabelFor(p => Model[0].nombreTipoUsuario)</td>
+                    <td>@Html.LabelFor(p => Model[0].NombreContrato)</td>
+                    <td width="10%" class="font-weight-bold">Acciones</td>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IDEmpleado</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.nombreTipoUsuario</td>
+                        <td>@item.NombreContrato</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "Empleado", new { id = item.IDEmpleado }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                            @Html.ActionLink(" ", "Delete", "Empleado", new { id = item.IDEmpleado }, new { @class = "btn btn-danger glyphicon glyphicon-trash", @onclick = "Delete()" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<script src="~/Scripts/Empleado.js"></script>
+

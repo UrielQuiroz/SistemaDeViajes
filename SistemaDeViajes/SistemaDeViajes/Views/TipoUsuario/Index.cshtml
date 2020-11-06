@@ -1,0 +1,79 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<TipoUsuarioModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tipo de usuarios</h2>
+@Html.ActionLink("Nuevo", "Add", "TipoUsuario", null, new { @class = "btn btn-success" })
+
+
+@using (Html.BeginForm("Index", "TipoUsuario", FormMethod.Post, new { @id="frmSearch"}))
+{
+    <div class="mt-3">
+        <table id="tabla" class="table table-bordered table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <td>@Html.LabelFor(p => Model[0].IdTipoUsuario)</td>
+                    <td>@Html.LabelFor(p => Model[0].Nombre)</td>
+                    <td>@Html.LabelFor(p => Model[0].Descripcion)</td>
+                    <td width="10%" class="font-weight-bold">Acciones</td>
+                </tr>
+            </thead>
+            <thead class="bg-light">
+                <tr>
+                    <td>@Html.TextBox("IdTipoUsuario", null, new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("Nombre", null, new { @class = "form-control" })</td>
+                    <td>@Html.TextBox("Descripcion", null, new { @class = "form-control" })</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdTipoUsuario</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "TipoUsuario", new { id = item.IdTipoUsuario }, new { @class = "btn btn-primary glyphicon glyphicon-edit" })
+                            @Html.ActionLink(" ", "Delete", "TipoUsuario", new { id = item.IdTipoUsuario }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#tabla').DataTable({
+            "searching": false,
+            lengthMenu: [[5, 10, 15, 20, 25, 50, -1], [5, 10, 15, 20, 25, 50, "Todos"]],
+        });
+    });
+
+
+    var user = document.getElementById("IdTipoUsuario");
+    var Nombre = document.getElementById("Nombre");
+    var description = document.getElementById("Descripcion");
+    var frmSearch = document.getElementById("frmSearch");
+
+    user.onkeyup = function () {
+        frmSearch.submit();
+    }
+
+    Nombre.onkeyup = function () {
+        frmSearch.submit();
+    }
+
+    description.onkeyup = function () {
+        frmSearch.submit();
+    }
+
+
+</script>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8c9a9c1351b645a8af20917ef663c340" Name="Diagram1" ZoomLevel="71">
+        <EntityTypeShape EntityType="BDPasajeModel.Asiento" Width="1.5" PointX="7.5" PointY="9.75" />
+        <EntityTypeShape EntityType="BDPasajeModel.Bus" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="BDPasajeModel.Cliente" Width="1.5" PointX="12" PointY="5.5" />
+        <EntityTypeShape EntityType="BDPasajeModel.DETALLEVENTA" Width="1.5" PointX="7.5" PointY="5.375" />
+        <EntityTypeShape EntityType="BDPasajeModel.Empleado" Width="1.5" PointX="15" PointY="5.375" />
+        <EntityTypeShape EntityType="BDPasajeModel.Lugar" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="BDPasajeModel.Marca" Width="1.5" PointX="0.75" PointY="12.625" />
+        <EntityTypeShape EntityType="BDPasajeModel.Modelo" Width="1.5" PointX="0.75" PointY="2.125" />
+        <EntityTypeShape EntityType="BDPasajeModel.Pagina" Width="1.5" PointX="2.75" PointY="16.75" />
+        <EntityTypeShape EntityType="BDPasajeModel.Rol" Width="1.5" PointX="2.75" PointY="13.875" />
+        <EntityTypeShape EntityType="BDPasajeModel.RolPagina" Width="1.5" PointX="5" PointY="13.75" />
+        <EntityTypeShape EntityType="BDPasajeModel.Sexo" Width="1.5" PointX="9.75" PointY="6.375" />
+        <EntityTypeShape EntityType="BDPasajeModel.Sucursal" Width="1.5" PointX="0.75" PointY="5.5" />
+        <EntityTypeShape EntityType="BDPasajeModel.TipoBus" Width="1.5" PointX="0.75" PointY="9.875" />
+        <EntityTypeShape EntityType="BDPasajeModel.TipoContrato" Width="1.5" PointX="12.75" PointY="10.875" />
+        <EntityTypeShape EntityType="BDPasajeModel.TipoUsuario" Width="1.5" PointX="12.75" PointY="2.125" />
+        <EntityTypeShape EntityType="BDPasajeModel.TIPOUSUARIOREGISTRO" Width="1.5" PointX="9.75" PointY="9.5" />
+        <EntityTypeShape EntityType="BDPasajeModel.Usuario" Width="1.5" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="BDPasajeModel.VENTA" Width="1.5" PointX="5.25" PointY="10.25" />
+        <EntityTypeShape EntityType="BDPasajeModel.Viaje" Width="1.5" PointX="5.25" PointY="4.875" />
+        <AssociationConnector Association="BDPasajeModel.FK__Asiento__IIDVIAJ__412EB0B6" />
+        <AssociationConnector Association="BDPasajeModel.FK__Bus__IIDMARCA__36B12243" />
+        <AssociationConnector Association="BDPasajeModel.FK__Bus__IIDMODELO__276EDEB3" />
+        <AssociationConnector Association="BDPasajeModel.FK__Bus__IIDTIPOBUS__267ABA7A" />
+        <AssociationConnector Association="BDPasajeModel.FK__DETALLEVE__IIDBU__6C190EBB" />
+        <AssociationConnector Association="BDPasajeModel.FK__Viaje__IIDBUS__3C69FB99" />
+        <AssociationConnector Association="BDPasajeModel.FK_Bus_Sucursal" />
+        <AssociationConnector Association="BDPasajeModel.FK__Cliente__IIDSEXO__286302EC" />
+        <AssociationConnector Association="BDPasajeModel.FK__Cliente__TIPOUSU__04E4BC85" />
+        <AssociationConnector Association="BDPasajeModel.FK__DETALLEVE__IIDVE__6A30C649" />
+        <AssociationConnector Association="BDPasajeModel.FK__DETALLEVE__IIDVI__6B24EA82" />
+        <AssociationConnector Association="BDPasajeModel.FK__Empleado__IIDSEX__2B3F6F97" />
+        <AssociationConnector Association="BDPasajeModel.FK__Empleado__IIDTIP__29572725" />
+        <AssociationConnector Association="BDPasajeModel.FK__Empleado__IIDTIP__2A4B4B5E" />
+        <AssociationConnector Association="BDPasajeModel.FK__Empleado__TIPOUS__05D8E0BE" />
+        <AssociationConnector Association="BDPasajeModel.FK__Viaje__IIDLUGARD__3A81B327" />
+        <AssociationConnector Association="BDPasajeModel.FK__Viaje__IIDLUGARO__398D8EEE" />
+        <AssociationConnector Association="BDPasajeModel.FK__RolPagina__IIDPA__6477ECF3" />
+        <AssociationConnector Association="BDPasajeModel.FK__RolPagina__IIDRO__6383C8BA" />
+        <AssociationConnector Association="BDPasajeModel.FK__VENTA__IIDUSUARI__4D94879B" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

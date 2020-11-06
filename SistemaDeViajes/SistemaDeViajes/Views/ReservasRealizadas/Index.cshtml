@@ -1,0 +1,101 @@
+﻿
+@using SistemaDeViajes.Models;
+@model List<ReservasRealizadasModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Reservas Realizadas</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="bg-primary">
+        <tr>
+            <td class="font-weight-bold">ID Venta</td>
+            <td class="font-weight-bold">Fecha Venta</td>
+            <td class="font-weight-bold">Total a Pagar</td>
+            <td width="10%" class="font-weight-bold">Detalle Venta</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IDVenta</td>
+                <td>@item.FechaVenta</td>
+                <td>@item.Total</td>
+                <td>
+                    <button type="button" class="btn btn-warning glyphicon glyphicon-folder-open" onclick="Detalle(@item.IDVenta)" data-toggle="modal" data-target="#modalDetalleVenta">
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalDetalleVenta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Detalle de la venta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tabla"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelar" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function Detalle(idVenta) {
+        alert(idVenta);
+        $.get("/ReservasRealizadas/listarDetalleVenta/?idVenta=" + idVenta, function (data) {
+            var contenido = "";
+            contenido += "<table class='table table-bordered table-hover'>"
+                contenido += "<thead class='bg-primary font-weight-bold'>"
+                    contenido += "<tr>"
+                        contenido += "<td>ID</td>"
+                        contenido += "<td>ID Viaje</td>"
+                        contenido += "<td>Origen</td>"
+                        contenido += "<td>Destino</td>"
+                        contenido += "<td>Placa</td>"
+                        contenido += "<td>Precio</td>"
+                        contenido += "<td>Cantidad</td>"
+
+                    contenido += "</tr>"
+                contenido += "</thead>"
+
+                contenido += "<tbody>"
+                var nfilas = data.length;
+                for (var i = 0; i < nfilas; i++) {
+                    contenido += "</tr>"
+                        contenido += "<td>" + data[i].IdDetalleVenta + "</td>"
+                        contenido += "<td>" + data[i].IdViaje + "</td>"
+                        contenido += "<td>" + data[i].Origen + "</td>"
+                        contenido += "<td>" + data[i].Destino + "</td>"
+                        contenido += "<td>" + data[i].Placa + "</td>"
+                        contenido += "<td>" + "$" + data[i].Precio + "</td>"
+                        contenido += "<td>" + data[i].Cantidad + "</td>"
+                    contenido += "<tr>"
+                }
+
+                contenido += "</tbody>"
+
+            contenido += "</table>"
+
+            document.getElementById("tabla").innerHTML = contenido;
+        })
+    }
+</script>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SistemaDeViajes.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +9,16 @@ namespace SistemaDeViajes.Controllers
 {
     public class HomeController : Controller
     {
+        BDPasajeEntities db;
+
+        public HomeController()
+        {
+            db = new BDPasajeEntities();
+        }
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

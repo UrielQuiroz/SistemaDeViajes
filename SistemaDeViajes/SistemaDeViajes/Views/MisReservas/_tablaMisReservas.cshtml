@@ -1,0 +1,60 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<ReservaModel>
+
+@{
+    ViewBag.Title = "Index";
+    int c = 1;
+    decimal total = 0;
+}
+
+<h2>Mis reservas</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="bg-primary font-weight-bold">
+        <tr>
+            <td>Correlativo</td>
+            <td>Origen</td>
+            <td>Destino</td>
+            <td>Fecha Viaje</td>
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Subtotal</td>
+            <td width="10%">Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                @{
+                    var subtotal = item.cantidad * item.precio;
+                    total += subtotal;
+                }
+
+                <td>@c</td>
+                <td>@item.lugarOrigen</td>
+                <td>@item.lugarDestino</td>
+                <td>@item.fechaViaje.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.cantidad</td>
+                <td>@item.precio</td>
+                <td>@subtotal</td>
+                <td>
+                    <button type="button" onclick="Delete(@item.IDViaje)" class="btn btn-danger glyphicon glyphicon-trash" data-toggle="modal" data-target="#exampleModalDelete"></button>
+                </td>
+            </tr>
+
+            c++;
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="6" class="font-weight-bold" style="text-align: right;">Total</td>
+            <td class="font-weight-bold text-dark" id="lblTotal">@total</td>
+        </tr>
+    </tfoot>
+
+</table>

@@ -1,0 +1,32 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<PaginaModel>
+
+
+<table class="table table-bordered table-hover">
+    <thead class="bg-primary">
+        <tr>
+            <td>@Html.LabelFor(p => Model[0].IDPagina)</td>
+            <td>@Html.LabelFor(p => Model[0].Mensaje)</td>
+            <td>@Html.LabelFor(p => Model[0].Accion)</td>
+            <td>@Html.LabelFor(p => Model[0].Controlador)</td>
+            <td  class="font-weight-bold">Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IDPagina</td>
+                <td>@item.Mensaje</td>
+                <td>@item.Accion</td>
+                <td>@item.Controlador</td>
+                <td>
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-edit" onclick="Editar(@item.IDPagina)" data-toggle="modal" data-target="#exampleModal"></button>
+                    <button type="button" class="btn btn-danger glyphicon glyphicon-trash" onclick="Delete(@item.IDPagina)" data-toggle="modal" data-target="#exampleModalDelete"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

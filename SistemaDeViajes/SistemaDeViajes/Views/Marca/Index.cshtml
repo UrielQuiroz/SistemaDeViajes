@@ -1,0 +1,73 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<MarcaModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<h2>Marcas</h2>
+
+@Html.ActionLink("Nuevo", "Add", "Marca", null, new { @class = "btn btn-success" })
+@Html.ActionLink("PDF", "PDFMarcas", "Marca", null, new { @class = "btn btn-info", target = "_blank" })
+@Html.ActionLink("EXCEL", "ExcelMarcas", "Marca", null, new { @class = "btn btn-info" })
+
+@using (Html.BeginForm("Index", "Marca", FormMethod.Post))
+{
+    <div class="mt-3">
+        @Html.Label("Buscar marca: ")
+        @Html.TextBox("Nombre", null, new { @class = "ml-2" })
+        <input type="submit" class="btn btn-info" value="Buscar" />
+    </div>
+
+    <div class="mt-3">
+        <table id="tabla" class="table table-bordered table-hover">
+            <thead class="bg-primary">
+                <tr>
+                    <td width="10%">@Html.LabelFor(p => Model[0].IDMarca)</td>
+                    <td width="20%">@Html.LabelFor(p => Model[0].Nombre)</td>
+                    <td width="60%">@Html.LabelFor(p => Model[0].Descripcion)</td>
+                    <td width="10%">Acciones</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IDMarca</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "Marca", new { id = item.IDMarca }, new { @class = "glyphicon glyphicon-edit btn btn-primary" })
+                            @Html.ActionLink(" ", "Delete", "Marca", new { id = item.IDMarca }, new { @class = "glyphicon glyphicon-trash btn btn-danger", @onclick = "Delete()" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+}
+
+<script>
+
+    //$(document).ready(function () {
+    //    $('#tabla').DataTable({
+    //        "searching": false,
+    //        lengthMenu: [[5, 10, 15, 20, 25, 50, -1], [5, 10, 15, 20, 25, 50, "Todos"]],
+    //    });
+    //});
+
+    function Delete() {
+        if (confirm("¿Desea elminar el registro?") == 1) {
+            alert("Se ha eliminado correctamente");
+        }
+        else {
+            event.preventDefault();
+        }
+    }
+
+</script>

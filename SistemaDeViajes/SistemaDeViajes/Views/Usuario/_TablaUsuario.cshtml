@@ -1,0 +1,34 @@
+﻿
+@using SistemaDeViajes.Models
+@model List<UsuarioModel>
+
+
+
+<table class="table table-bordered table-hover">
+    <thead class="bg-primary">
+        <tr>
+            <td>@Html.Label("ID")</td>
+            <td>@Html.Label("Persona")</td>
+            <td>@Html.Label("Usuario")</td>
+            <td>@Html.Label("Rol")</td>
+            <td>@Html.Label("Tipo de Usuario")</td>
+            <td width="10%" class="font-weight-bold">Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdUsuario</td>
+                <td>@item.nombrePersona</td>
+                <td>@item.nombreUsuario</td>
+                <td>@item.nombreRol</td>
+                <td>@item.nombrTipoUsuario</td>
+                <td>
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-edit" onclick="Edit(@item.IdUsuario)" data-toggle="modal" data-target="#exampleModal"></button>
+                    <button type="button" class="btn btn-danger glyphicon glyphicon-trash" onclick="Delete(@item.IdUsuario)" data-toggle="modal" data-target="#exampleModalDelete"></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
