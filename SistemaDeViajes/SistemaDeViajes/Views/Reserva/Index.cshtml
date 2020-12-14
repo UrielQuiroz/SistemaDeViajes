@@ -74,6 +74,7 @@
              
              class="@clase"
              >
+
             @{ 
                 string foto = Convert.ToBase64String(item.Foto);
                 string extensionFoto = Path.GetExtension(item.nombreFoto).Substring(1);
@@ -124,7 +125,8 @@
         }
 
         //Hacemmos el confirm
-        if (confirm("Desea hacer la reserva?") == 1) {
+        if (confirm("Desea hacer la reserva?") == 1)
+        {
             if (document.getElementById(idViaje).classList.contains("agregar")) {
                 alert("Ya se ha agregado la reserva.");
             }

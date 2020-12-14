@@ -73,22 +73,168 @@ namespace SistemaDeViajes.Controllers
 
             return File(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
-        
+
+
+
+        class HeaderFooter : PdfPageEventHelper
+        {
+            string pathImageGlobal = null;
+            string pathImageFondo = null;
+            public HeaderFooter(string pathLogo, string marcaAgua)
+            {
+                pathImageGlobal = pathLogo;
+                pathImageFondo = marcaAgua;
+            }
+
+            public override void OnEndPage(PdfWriter writer, Document document)
+            {
+                PdfContentByte cb = writer.DirectContent;
+                iTextSharp.text.Image fondo = iTextSharp.text.Image.GetInstance(pathImageFondo);
+
+                float positionY = (writer.PageSize.Top /2) - (fondo.Width/2);
+                float positionX = (writer.PageSize.Right/2) - (fondo.Height/2);
+
+                fondo.SetAbsolutePosition(positionX, positionY);
+                PdfGState state = new PdfGState();
+                state.FillOpacity = 0.3f;
+                cb.SetGState(state);
+                cb.AddImage(fondo);
+
+                //base.OnEndPage(writer, document);
+                PdfPTable header = new PdfPTable(3);
+                header.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+                header.DefaultCell.Border = 0;
+
+                header.AddCell(new Paragraph());
+                PdfPCell _cell = new PdfPCell(new Paragraph("Lista de marcas"));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                _cell.Border = 0;
+                header.AddCell(_cell);
+                header.AddCell(new Paragraph());
+
+                header.WriteSelectedRows(0, -1, document.LeftMargin, writer.PageSize.GetTop(document.TopMargin) + 40, writer.DirectContent);
+
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                PdfPTable footer = new PdfPTable(3);
+                footer.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+                footer.DefaultCell.Border = 0;
+
+                footer.AddCell(new Paragraph());
+                _cell = new PdfPCell(new Paragraph("NovoSys"));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                _cell.Border = 0;
+                footer.AddCell(_cell);
+
+                _cell = new PdfPCell(new Paragraph("Pagina " + writer.PageNumber));
+                _cell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                _cell.Border = 0;
+
+                footer.AddCell(_cell);
+                footer.AddCell(new Paragraph());
+                footer.WriteSelectedRows(0, -1, document.LeftMargin, writer.PageSize.GetBottom(document.BottomMargin) -5, writer.DirectContent);
+
+
+                //Imagen
+                iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(pathImageGlobal);
+                logo.SetAbsolutePosition(document.LeftMargin, writer.PageSize.GetTop(document.TopMargin) + 2);
+                logo.ScaleAbsolute(50f, 50f);
+                document.Add(logo);
+
+            }
+        }
+
+        public ActionResult PDFMarcasNew()
+        {
+            MemoryStream ms = new MemoryStream();
+
+            Document document = new Document(iTextSharp.text.PageSize.LETTER, 30f, 20f, 50f, 40f);
+            PdfWriter pw = PdfWriter.GetInstance(document, ms);
+
+            string pathImageGlobal = Server.MapPath("/img/NOVOLEADSlogoo.png");
+            string pathImageFondo = Server.MapPath("/img/NOVOLEADSlogoo.png");
+            pw.PageEvent = new HeaderFooter(pathImageGlobal, pathImageFondo);
+            document.Open();
+
+            string nameFont = Server.MapPath("/fonts/Megan June.otf");
+
+            BaseFont bf = BaseFont.CreateFont(nameFont, BaseFont.CP1250, BaseFont.EMBEDDED);
+            iTextSharp.text.Font fontText = new iTextSharp.text.Font(bf, 10, 0, BaseColor.BLACK);
+
+
+            PdfPTable table = new PdfPTable(3);
+            table.WidthPercentage = 100f;
+
+
+            PdfPCell celda1 = new PdfPCell(new Phrase("ID"));
+            celda1.BackgroundColor = new BaseColor(130, 130, 130);
+            celda1.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            table.AddCell(celda1);
+
+            PdfPCell celda2 = new PdfPCell(new Phrase("Nombre"));
+            celda2.BackgroundColor = new BaseColor(130, 130, 130);
+            celda2.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            table.AddCell(celda2);
+
+            PdfPCell celda3 = new PdfPCell(new Phrase("Descripción"));
+            celda3.BackgroundColor = new BaseColor(130, 130, 130);
+            celda3.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+            table.AddCell(celda3);
+
+
+            List<MarcaModel> listModel = (List<MarcaModel>)Session["Lista"];
+            int numregistros = listModel.Count;
+
+            for (int i = 0; i < numregistros; i++)
+            {
+                PdfPCell _cell = new PdfPCell();
+
+                _cell = new PdfPCell(new Paragraph(listModel[i].IDMarca.ToString(), fontText));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                table.AddCell(_cell);
+
+                _cell = new PdfPCell(new Paragraph(listModel[i].Nombre, fontText));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                table.AddCell(_cell);
+
+                _cell = new PdfPCell(new Paragraph(listModel[i].Descripcion, fontText));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                table.AddCell(_cell);
+            }
+
+            document.Add(table);
+            
+            document.Close();
+
+            byte[] byteStream = ms.ToArray();
+            ms = new MemoryStream();
+            ms.Write(byteStream, 0, byteStream.Length);
+            ms.Position = 0;
+
+
+            return new FileStreamResult(ms, "application/pdf");
+            //return null;
+
+        }
+
+
+
+
         public FileResult PDFMarcas()
         {
             Document doc = new Document();
             byte[] buffer;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                PdfWriter.GetInstance(doc, ms);
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            MemoryStream ms = new MemoryStream();
+                PdfWriter pw = PdfWriter.GetInstance(doc, ms);
                 doc.Open();
 
-                Paragraph title = new Paragraph("Lista Marca");
-                title.Alignment = Element.ALIGN_CENTER;
-                doc.Add(title);
+                //Paragraph title = new Paragraph("Lista Marca");
+                //title.Alignment = Element.ALIGN_CENTER;
+                //doc.Add(title);
 
-                Paragraph space = new Paragraph(" ");
-                doc.Add(space);
+                //Paragraph space = new Paragraph(" ");
+                //doc.Add(space);
 
                 //Definimos las columnas de la tabla
                 PdfPTable tabla = new PdfPTable(3);
@@ -129,7 +275,7 @@ namespace SistemaDeViajes.Controllers
                 doc.Close();
 
                 buffer = ms.ToArray();
-            }
+            //}
 
             return File(buffer, "application/pdf");
         }

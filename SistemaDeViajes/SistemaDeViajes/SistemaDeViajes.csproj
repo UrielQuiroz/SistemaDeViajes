@@ -147,6 +147,7 @@
     <Compile Include="Controllers\EmpleadoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\LugarController.cs" />
     <Compile Include="Controllers\MarcaController.cs" />
     <Compile Include="Controllers\MisReservasController.cs" />
     <Compile Include="Controllers\PaginaController.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Models\Lugar.cs">
       <DependentUpon>AppDContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LugarModel.cs" />
     <Compile Include="Models\Marca.cs">
       <DependentUpon>AppDContext.tt</DependentUpon>
     </Compile>
@@ -266,6 +268,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\NoImage.png" />
+    <Content Include="img\NOVOLEADSlogoo.png" />
     <Content Include="img\users\NoImage.png" />
     <Content Include="Models\AppDContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -286,6 +289,7 @@
     <Content Include="Models\AppDContext.edmx.diagram">
       <DependentUpon>AppDContext.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\Megan June.otf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\Bus.js" />
     <Content Include="Scripts\Cliente.js" />
@@ -351,6 +355,8 @@
     <Content Include="Views\MisReservas\Index.cshtml" />
     <Content Include="Views\MisReservas\_tablaMisReservas.cshtml" />
     <Content Include="Views\ReservasRealizadas\Index.cshtml" />
+    <Content Include="Views\Lugar\Index.cshtml" />
+    <Content Include="Views\Lugar\_TablaLugar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

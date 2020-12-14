@@ -1,0 +1,32 @@
+﻿
+
+@using SistemaDeViajes.Models
+@model List<LugarModel>
+
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<button type="button" class="btn btn-success" onclick="Agregar()" data-toggle="modal" data-target="#exampleModal">
+    Nuevo
+</button>
+
+@using (Ajax.BeginForm("Filtro", "", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "div",
+    InsertionMode = InsertionMode.Replace
+},
+    new { @id = "frmFilter" }))
+{
+    @*@Html.Label("Buscar pagina")
+    @Html.TextBox("MensajePagina", null, new { @class = "form-control" })*@
+
+    <div id="divPagina" class="mt-3">
+        @Html.Partial("_TablaLugar", Model)
+    </div>
+}

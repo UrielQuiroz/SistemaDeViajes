@@ -23,8 +23,8 @@
         {
             <tr>
                 <td>@item.IDVenta</td>
-                <td>@item.FechaVenta</td>
-                <td>@item.Total</td>
+                <td>@item.FechaVenta.ToShortDateString()</td>
+                <td>$@item.Total</td>
                 <td>
                     <button type="button" class="btn btn-warning glyphicon glyphicon-folder-open" onclick="Detalle(@item.IDVenta)" data-toggle="modal" data-target="#modalDetalleVenta">
                     </button>
@@ -60,7 +60,7 @@
 
 <script>
     function Detalle(idVenta) {
-        alert(idVenta);
+        //alert(idVenta);
         $.get("/ReservasRealizadas/listarDetalleVenta/?idVenta=" + idVenta, function (data) {
             var contenido = "";
             contenido += "<table class='table table-bordered table-hover'>"
@@ -79,17 +79,18 @@
 
                 contenido += "<tbody>"
                 var nfilas = data.length;
-                for (var i = 0; i < nfilas; i++) {
-                    contenido += "</tr>"
-                        contenido += "<td>" + data[i].IdDetalleVenta + "</td>"
-                        contenido += "<td>" + data[i].IdViaje + "</td>"
-                        contenido += "<td>" + data[i].Origen + "</td>"
-                        contenido += "<td>" + data[i].Destino + "</td>"
-                        contenido += "<td>" + data[i].Placa + "</td>"
-                        contenido += "<td>" + "$" + data[i].Precio + "</td>"
-                        contenido += "<td>" + data[i].Cantidad + "</td>"
-                    contenido += "<tr>"
-                }
+                for (var i = 0; i < nfilas; i++)
+                {
+                        contenido += "</tr>"
+                            contenido += "<td>" + data[i].IdDetalleVenta + "</td>"
+                            contenido += "<td>" + data[i].IdViaje + "</td>"
+                            contenido += "<td>" + data[i].Origen + "</td>"
+                            contenido += "<td>" + data[i].Destino + "</td>"
+                            contenido += "<td>" + data[i].Placa + "</td>"
+                            contenido += "<td>" + "$" + data[i].Precio + "</td>"
+                            contenido += "<td>" + data[i].Cantidad + "</td>"
+                        contenido += "<tr>"
+                    }
 
                 contenido += "</tbody>"
 

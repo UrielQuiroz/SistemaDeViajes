@@ -12,6 +12,7 @@
 
 @Html.ActionLink("Nuevo", "Add", "Marca", null, new { @class = "btn btn-success" })
 @Html.ActionLink("PDF", "PDFMarcas", "Marca", null, new { @class = "btn btn-info", target = "_blank" })
+@Html.ActionLink("PDF NEW", "PDFMarcasNew", "Marca", null, new { @class = "btn btn-info", target = "_blank" })
 @Html.ActionLink("EXCEL", "ExcelMarcas", "Marca", null, new { @class = "btn btn-info" })
 
 @using (Html.BeginForm("Index", "Marca", FormMethod.Post))
